@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DungeonPortalEntity extends EndPortalBlockEntity implements ExtendedScreenHandlerFactory<DungeonPortalPacket> {
 
@@ -61,6 +62,7 @@ public class DungeonPortalEntity extends EndPortalBlockEntity implements Extende
     private Map<BlockPos, Powered> poweredBlockMap = new HashMap<>();
     private BlockPos bossBlockPos = new BlockPos(0, 0, 0);
     private BlockPos bossLootBlockPos = new BlockPos(0, 0, 0);
+    private BlockPos dungeonStartModificationPos = new BlockPos(0, 0, 0);
     private HashMap<BlockPos, Integer> spawnerPosEntityIdMap = new HashMap<BlockPos, Integer>();
     private HashMap<BlockPos, Integer> replacePosBlockIdMap = new HashMap<BlockPos, Integer>();
     private List<Integer> dungeonEdgeList = new ArrayList<Integer>();
@@ -68,6 +70,10 @@ public class DungeonPortalEntity extends EndPortalBlockEntity implements Extende
 
     public DungeonPortalEntity(BlockPos pos, BlockState state) {
         super(BlockInit.DUNGEON_PORTAL_ENTITY, pos, state);
+    }
+
+    public BlockPos getDungeonStartModificationPos() {
+        return dungeonStartModificationPos;
     }
 
     @Override
@@ -110,6 +116,11 @@ public class DungeonPortalEntity extends EndPortalBlockEntity implements Extende
         int[] bossLootPos = nbt.getIntArray("BossLootPos");
         if (bossLootPos.length > 0) {
             this.bossLootBlockPos = new BlockPos(bossLootPos[0], bossLootPos[1], bossLootPos[2]);
+        }
+
+        int[] dungeonStartModificationPos = nbt.getIntArray("DungeonModificationPos");
+        if(dungeonStartModificationPos.length > 0) {
+            this.dungeonStartModificationPos = new BlockPos(dungeonStartModificationPos[0], dungeonStartModificationPos[1], dungeonStartModificationPos[2]);
         }
 
         if (nbt.getInt("ChestListSize") > 0) {
@@ -214,8 +225,10 @@ public class DungeonPortalEntity extends EndPortalBlockEntity implements Extende
                 blockCount++;
             }
         }
+
         nbt.putIntArray("BossPos", List.of(this.bossBlockPos.getX(), this.bossBlockPos.getY(), this.bossBlockPos.getZ()));
         nbt.putIntArray("BossLootPos", List.of(this.bossLootBlockPos.getX(), this.bossLootBlockPos.getY(), this.bossLootBlockPos.getZ()));
+        nbt.putIntArray("DungeonModificationPos", List.of(this.dungeonStartModificationPos.getX(), this.dungeonStartModificationPos.getY(), this.dungeonStartModificationPos.getZ()));
 
         nbt.putInt("ChestListSize", this.chestPosList.size());
         if (!this.chestPosList.isEmpty()) {
@@ -634,17 +647,15 @@ public class DungeonPortalEntity extends EndPortalBlockEntity implements Extende
     public void startDungeonTeleportCountdown(ServerWorld dungeonWorld) {
         this.dungeonTeleportCountdown = ConfigInit.CONFIG.defaultDungeonTeleportCountdown;
 
-        boolean isDungeonStructureGenerated = this.isDungeonStructureGenerated();
-        if (!isDungeonStructureGenerated) {
-            this.setDungeonStructureGenerated();
-            DungeonPlacementHandler.generateDungeonStructure(dungeonWorld, new BlockPos(0, 0, 0).add(this.getPos().getX() * 16, 100, this.getPos().getZ() * 16), this);
-        } else {
-            DungeonPlacementHandler.prepareDungeon(dungeonWorld, this);
-        }
+        this.dungeonStartModificationPos = new BlockPos(0, 0, 0).add(this.getPos().getX() * 16, 100, this.getPos().getZ() * 16);
+        this.dungeonStartModificationPos = dungeonStartModificationPos.add(ThreadLocalRandom.current().nextInt(-32, 32 + 1), ThreadLocalRandom.current().nextInt(-32, 32 + 1), ThreadLocalRandom.current().nextInt(-32, 32 + 1));
+
+        DungeonPlacementHandler.generateDungeonStructure(dungeonWorld, dungeonStartModificationPos, this);
+
         this.markDirty();
     }
 
-    public int getdungeonTeleportCountdown() {
+    public int getDungeonTeleportCountdown() {
         return this.dungeonTeleportCountdown;
     }
 

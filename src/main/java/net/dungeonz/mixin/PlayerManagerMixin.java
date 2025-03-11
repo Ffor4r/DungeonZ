@@ -59,8 +59,7 @@ public class PlayerManagerMixin {
     private TeleportTarget respawnPlayerMixin(TeleportTarget original, ServerPlayerEntity oldPlayer, boolean alive, Entity.RemovalReason removalReason) {
         if (!alive && oldPlayer.getWorld().getRegistryKey() == DimensionInit.DUNGEON_WORLD && DungeonHelper.getDungeonPortalEntity(oldPlayer) != null
                 && DungeonHelper.getDungeonPortalEntity(oldPlayer).getDungeon().isRespawnAllowed()) {
-            BlockPos pos = DungeonHelper.getDungeonPortalEntity(oldPlayer).getPos();
-            return new TeleportTarget(oldPlayer.getServerWorld(), new Vec3d(pos.getX() * 16, 100, pos.getZ() * 16), Vec3d.ZERO, oldPlayer.getYaw(), 0.0f, alive, TeleportTarget.NO_OP);
+            return new TeleportTarget(oldPlayer.getServerWorld(), Vec3d.of(DungeonHelper.getDungeonPortalEntity(oldPlayer).getDungeonStartModificationPos()), Vec3d.ZERO, oldPlayer.getYaw(), 0.0f, alive, TeleportTarget.NO_OP);
         }
         return original;
     }

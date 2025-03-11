@@ -76,7 +76,7 @@ public class DungeonPlacementHandler {
 
         portalEntity.joinDungeon(serverPlayerEntity.getUuid());
 
-        return new TeleportTarget(dungeonWorld, Vec3d.of(new BlockPos(0, 0, 0).add(portalPos.getX() * 16, 100, portalPos.getZ() * 16)).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP);
+        return new TeleportTarget(dungeonWorld, Vec3d.of(portalEntity.getDungeonStartModificationPos()).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP);
     }
 
     public static TeleportTarget leave(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld) {

@@ -2,13 +2,11 @@ package net.dungeonz.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
 
-import net.dungeonz.block.screen.DungeonPortalScreen;
 import net.levelz.access.LevelManagerAccess;
 import net.levelz.level.LevelManager;
 import org.jetbrains.annotations.Nullable;
@@ -179,15 +177,15 @@ public class DungeonHelper {
                                 player.sendMessage(Text.translatable("text.dungeonz.dungeon_min_group_size", (dungeonPortalEntity.getMinGroupSize() - dungeonPortalEntity.getWaitingUuids().size())),
                                         false);
                                 return;
-                            } else if (dungeonPortalEntity.getdungeonTeleportCountdown() <= 0) {
+                            } else if (dungeonPortalEntity.getDungeonTeleportCountdown() <= 0) {
                                 dungeonPortalEntity.startDungeonTeleportCountdown(dungeonWorld);
                                 player.closeHandledScreen();
                             }
-                        } else if (dungeonPortalEntity.getDungeonPlayerCount() <= 0 && dungeonPortalEntity.getdungeonTeleportCountdown() <= 0) {
+                        } else if (dungeonPortalEntity.getDungeonPlayerCount() <= 0 && dungeonPortalEntity.getDungeonTeleportCountdown() <= 0) {
                             dungeonPortalEntity.addWaitingUuid(requiredMinGroupUuid);
                             dungeonPortalEntity.startDungeonTeleportCountdown(dungeonWorld);
                             player.closeHandledScreen();
-                        } else if (dungeonPortalEntity.getdungeonTeleportCountdown() > 0) {
+                        } else if (dungeonPortalEntity.getDungeonTeleportCountdown() > 0) {
                             dungeonPortalEntity.addWaitingUuid(requiredMinGroupUuid);
                             player.closeHandledScreen();
                         } else if (!dungeonPortalEntity.getDeadDungeonPlayerUUIDs().contains(player.getUuid()) || dungeonPortalEntity.getDungeon().isRespawnAllowed()) {
