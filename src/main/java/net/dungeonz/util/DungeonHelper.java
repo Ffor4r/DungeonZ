@@ -210,6 +210,10 @@ public class DungeonHelper {
 
         DungeonServerPacket.writeS2CDungeonInfoPacket(playerEntity, dungeonPortalEntity.getDungeon().getBreakableBlockIdList(), dungeonPortalEntity.getDungeon().getplaceableBlockIdList(),
                 dungeonPortalEntity.getDungeon().isElytraAllowed());
+
+        if (!dungeonPortalEntity.getExitPosList().isEmpty()) {
+            dungeonPortalEntity.finishDungeon(dungeonWorld, dungeonPortalEntity.getExitPosList().get(0));
+        }
     }
 
     public static void teleportOutOfDungeon(ServerPlayerEntity player) {

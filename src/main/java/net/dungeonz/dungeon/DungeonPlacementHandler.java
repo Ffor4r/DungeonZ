@@ -317,18 +317,18 @@ public class DungeonPlacementHandler {
             world.setBlockState(entry.getKey(), Registries.BLOCK.get(entry.getValue()).getDefaultState(), 3);
         }
         // Refresh powered blocks
-        for (Entry<BlockPos, DungeonPortalEntity.Powered> entry : portalEntity.getPoweredBlockMap().entrySet()) {
-            BlockState blockState = Registries.BLOCK.get(entry.getValue().getBlockId()).getDefaultState().with(Properties.POWERED, entry.getValue().getPowered());
-            boolean hasFacing = blockState.contains(Properties.HORIZONTAL_FACING);
-            if (hasFacing) {
-                blockState = blockState.with(Properties.HORIZONTAL_FACING, Direction.fromHorizontal(entry.getValue().getFacing()));
-            }
-            world.setBlockState(entry.getKey(), blockState, 3);
-            world.updateNeighborsAlways(entry.getKey(), world.getBlockState(entry.getKey()).getBlock());
-            if (hasFacing) {
-                world.updateNeighborsAlways(entry.getKey().offset(world.getBlockState(entry.getKey()).get(Properties.HORIZONTAL_FACING).getOpposite()), world.getBlockState(entry.getKey()).getBlock());
-            }
-        }
+//        for (Entry<BlockPos, DungeonPortalEntity.Powered> entry : portalEntity.getPoweredBlockMap().entrySet()) {
+//            BlockState blockState = Registries.BLOCK.get(entry.getValue().getBlockId()).getDefaultState().with(Properties.POWERED, entry.getValue().getPowered());
+//            boolean hasFacing = blockState.contains(Properties.HORIZONTAL_FACING);
+//            if (hasFacing) {
+//                blockState = blockState.with(Properties.HORIZONTAL_FACING, Direction.fromHorizontal(entry.getValue().getFacing()));
+//            }
+//            world.setBlockState(entry.getKey(), blockState, 3);
+//            world.updateNeighborsAlways(entry.getKey(), world.getBlockState(entry.getKey()).getBlock());
+//            if (!blockState.isAir() && hasFacing) {
+//                world.updateNeighborsAlways(entry.getKey().offset(world.getBlockState(entry.getKey()).get(Properties.HORIZONTAL_FACING).getOpposite()), world.getBlockState(entry.getKey()).getBlock());
+//            }
+//        }
         // Refresh moving blocks
         List<BlockPos> freshPlacedBlockPoses = new ArrayList<>();
         for (Entry<BlockPos, Integer> entry : portalEntity.getMovingBlockMap().entrySet()) {

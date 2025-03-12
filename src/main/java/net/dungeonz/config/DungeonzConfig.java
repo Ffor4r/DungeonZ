@@ -8,7 +8,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 @Config.Gui.Background("minecraft:textures/block/stone.png")
 public class DungeonzConfig implements ConfigData {
 
-    public boolean defaultDungeons = true;
+    public boolean defaultDungeons = false;
     @Comment("In ticks, used for preloading")
     public int defaultDungeonTeleportCountdown = 200;
     public int countdownX = 0;
