@@ -20,7 +20,7 @@ import net.minecraft.util.Rarity;
 
 public class BlockInit {
 
-    public static final Block DUNGEON_PORTAL = register("dungeon_portal", new DungeonPortalBlock(AbstractBlock.Settings.copy(Blocks.END_PORTAL)));
+    public static final Block DUNGEON_PORTAL = register("dungeon_portal", new DungeonPortalBlock(AbstractBlock.Settings.copy(Blocks.END_PORTAL).solid()));
     public static final Block DUNGEON_SPAWNER = register("dungeon_spawner", new DungeonSpawnerBlock(AbstractBlock.Settings.copy(Blocks.SPAWNER)));
     public static final Block DUNGEON_GATE = register("dungeon_gate", new DungeonGateBlock(AbstractBlock.Settings.copy(Blocks.BEDROCK).nonOpaque()));
 
